@@ -1,0 +1,51 @@
+
+version: '3'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-master
+    ports:
+      - "8080:8080"
+      - "50000:50000" # Y: JavaNetworkLaunchProtocol = agent-master-connection.
+    volumes:
+      - jenkins_home: /var/jenkins_home
+    # environment:
+    # depends_on:
+  agent1:
+    image: jenkins/inbound-agent
+    container_name: jenkins-agent1
+    # ports:
+    # volumes:
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_SECRET=
+      - JENKINS_AGENT_NAME=agent1
+    depends_on:
+      - jenkins
+
+  agent2:
+    image: jenkins/inbound-agent
+    container_name: jenkins-agent2
+    # ports:
+    # volumes:
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_SECRET=
+      - JENKINS_AGENT_NAME=agent2
+    depends_on:
+      - jenkins
+
+volumes:
+  jenkins_home:
+
+
+
+  # Y: 
+  # service:
+    # jenkins:
+    #   image:
+    #   container_name:
+    #   ports:
+    #   volumes:
+    #   environment:
+    #   depends_on:
