@@ -1,68 +1,39 @@
 version: '3'
-services:
+services: 
   jenkins:
     image: jenkins/jenkins:latest
     container_name: jenkins-master
     ports:
       - "8080:8080"
-      - "50000:50000" # Y: JavaNetworkLaunchProtocol(JNLP) = jenkins-agent-connection
-    # en vir on ment:
-    # environment:
+      - "50000:50000"
     volumes:
-      - jenkins_home:/var/jenkins_home
+    - jenkins_home:/var/jenkins_home
+    # envirnoment:
     # depends_on:
-    
   agent1:
     image: jenkins/inbound-agent
     container_name: jenkins-agent1
     # ports:
-    # en vir on ment:
+    # volumes:
     environment:
       - JENKINS_URL=http://jenkins:8080
-      - JENKINS_SECRET=
+      - JENKINS_SECRET=dc6d3c2c967842af9adf70ae992f23ca
       - JENKINS_AGENT_NAME=agent1
-    # volumes:
     depends_on:
       - jenkins
-
+    # ports:
+    # en vir on ment:
   agent2:
     image: jenkins/inbound-agent
     container_name: jenkins-agent2
     # ports:
-    # en vir on ment:
+    # volumes:
     environment:
       - JENKINS_URL=http://jenkins:8080
-      - JENKINS_SECRET=
+      - JENKINS_SECRET=dc6d3c2c967842af9adf70ae992f23ca
       - JENKINS_AGENT_NAME=agent2
     # volumes:
     depends_on:
       - jenkins
 volumes:
   jenkins_home:
-
-  # Y: 
-  # services:
-  #   servcie_name:
-  #     image:
-  #     container_name:
-  #     ports:
-  #     volumes:
-  #     env-ir-no-ment:
-  #     depends_on:
-  
-
-# R: 
-# ________________________________________________________
-# | Service | Address                                    |
-# | ------- | ------------------------------------------ |
-# | jenkins | [http://jenkins:8080](http://jenkins:8080) |
-# | agent1  | [http://agent1:…](http://agent1:…)         |
-# | agent2  | [http://agent2:…](http://agent2:…)         |
-# |======================================================|
-
-# IMP:
-  # step:1 => podman-compose up -d
-  # step:2 => podman exec -it jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
-  # step:3 => - JENKINS_SECRET=16a22dfdfaca40565c ( WITH ABOVE CODE )
-  # step:4 => podman-compose up -d agent1
-
