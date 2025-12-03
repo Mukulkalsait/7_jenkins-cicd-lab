@@ -1,45 +1,79 @@
 version: '3'
 
 services: 
+
+  # G: |1|
   jenkins:
     image: jenkins/jenkins:latest
     container_name: jenkins-master
     ports:
       - "8080:8080"
-      - "50000:50000"
+      - "50000:50000" # Y: JavaNetworkLaunchProtocol(JNLP) = jenkins-agent-connection
     volumes:
-    - jenkins_home:/var/jenkins_home
+      # Y:   hostPath: containerPath
+      - /home/mukuldk/1_file/3_Repos_All/A_gitHub/7_jenkins-cicd-lab/3_Jenkins_data_folder/main:/var/jenkins_home
     # envirnoment:
     # depends_on:
+
+  # G: |2|
   agent1:
     image: jenkins/inbound-agent:latest
     container_name: jenkins-agent1
-    # ports:
     environment:
       - JENKINS_URL=http://jenkins:8080/
-      - JENKINS_SECRET=f736e2ea913604d45091121dc14f3b650d187dc08f7fdb1a0205f5e142094c3a 
+      - JENKINS_SECRET=f736e2ea913604d45091121dc14f3b650d187dc08f7fdb1a0205f5e142094c3a
       # Y: To get JENKINS_SECRET create a node in jenkins appa and select the node, there we will se the commands with a secret code.
       - JENKINS_AGENT_NAME=agent1
       - JENKINS_WEB_SOCKET=true
     volumes:
-      - /home/jenkins/agent:/home/jenkins/agent
+      - /home/mukuldk/1_file/3_Repos_All/A_gitHub/7_jenkins-cicd-lab/3_Jenkins_data_folder/agent1/:/home/jenkins/agent
     depends_on:
       - jenkins
-    # ports:
-    # en vir on ment:
+
+  # G: |3|
   agent2:
     image: jenkins/inbound-agent:latest
     container_name: jenkins-agent2
-    # ports:
-    # volumes:
     environment:
-      - JENKINS_URL=http://jenkins:8080
-      - JENKINS_SECRET=f736e2ea913604d45091121dc14f3b650d187dc08f7fdb1a0205f5e142094c3a
+      - JENKINS_URL=http://jenkins:8080/
+      - JENKINS_SECRET=<SECRET_FROM_AGENT2_NODE>
+      # DX: WE NEED DIFFERENT SECRET CODE FOR DIFFERENT NODE.
       - JENKINS_AGENT_NAME=agent2
       - JENKINS_WEB_SOCKET=true
     volumes:
-      - /home/jenkins/agent:/home/jenkins/agent
+      - /home/mukuldk/1_file/3_Repos_All/A_gitHub/7_jenkins-cicd-lab/3_Jenkins_data_folder/agent2/:/home/jenkins/agent
     depends_on:
       - jenkins
+
 volumes:
   jenkins_home:
+
+  # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+  # Y: 
+  # services:
+  #   servcie_name:
+  #     image:
+  #     container_name:
+  #     ports:
+  #     volumes:
+  #     env-ir-no-ment:
+  #     depends_on:
+  
+
+# R: 
+# ________________________________________________________
+# | Service | Address                                    |
+# | ------- | ------------------------------------------ |
+# | jenkins | [http://jenkins:8080](http://jenkins:8080) |
+# | agent1  | [http://agent1:…](http://agent1:…)         |
+# | agent2  | [http://agent2:…](http://agent2:…)         |
+# |======================================================|
+
+# IMP:
+  # step:1 => podman-compose up -d
+  # step:2 => podman exec -it jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword
+  # step:3 => - JENKINS_SECRET=16a22dfdfaca40565c ( WITH ABOVE CODE )
+  # step:4 => podman-compose up -d agent1
+
