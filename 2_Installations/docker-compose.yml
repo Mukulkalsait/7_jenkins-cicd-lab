@@ -1,4 +1,5 @@
 version: '3'
+
 services: 
   jenkins:
     image: jenkins/jenkins:latest
@@ -11,28 +12,33 @@ services:
     # envirnoment:
     # depends_on:
   agent1:
-    image: jenkins/inbound-agent
+    image: jenkins/inbound-agent:latest
     container_name: jenkins-agent1
     # ports:
-    # volumes:
     environment:
-      - JENKINS_URL=http://jenkins:8080
-      - JENKINS_SECRET=dc6d3c2c967842af9adf70ae992f23ca
+      - JENKINS_URL=http://jenkins:8080/
+      - JENKINS_SECRET=f736e2ea913604d45091121dc14f3b650d187dc08f7fdb1a0205f5e142094c3a 
+      # Y: To get JENKINS_SECRET create a node in jenkins appa and select the node, there we will se the commands with a secret code.
       - JENKINS_AGENT_NAME=agent1
+      - JENKINS_WEB_SOCKET=true
+    volumes:
+      - /home/jenkins/agent:/home/jenkins/agent
     depends_on:
       - jenkins
     # ports:
     # en vir on ment:
   agent2:
-    image: jenkins/inbound-agent
+    image: jenkins/inbound-agent:latest
     container_name: jenkins-agent2
     # ports:
     # volumes:
     environment:
       - JENKINS_URL=http://jenkins:8080
-      - JENKINS_SECRET=dc6d3c2c967842af9adf70ae992f23ca
+      - JENKINS_SECRET=f736e2ea913604d45091121dc14f3b650d187dc08f7fdb1a0205f5e142094c3a
       - JENKINS_AGENT_NAME=agent2
-    # volumes:
+      - JENKINS_WEB_SOCKET=true
+    volumes:
+      - /home/jenkins/agent:/home/jenkins/agent
     depends_on:
       - jenkins
 volumes:
