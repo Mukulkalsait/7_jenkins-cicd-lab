@@ -49,6 +49,9 @@ services:
 
 volumes:
   jenkins_home:
+    external: true
+    name: 2_installations_jenkins_home
+
   # Y: managed by podman => can be used like this ->
   # podman volume inspect jenkins_home
   # podman volume export jenkins_home > backup.tar
