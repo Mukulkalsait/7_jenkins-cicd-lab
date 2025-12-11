@@ -1,0 +1,31 @@
+version: '3'
+
+services: 
+  jenkins-master:
+    contaienr_name: jenkins-master
+    image: docker.io/jenkins/jenkins:latest
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes: 
+      - jenkins_home:/var/jenkins_home
+    # environment:
+    # depends_on:
+  agent1:
+    contaienr_name: jenkins-agent1
+    image: docker.io/jenkins/inbound-agent:latest
+    # ports:
+    #   - 8080:8080
+    #   - 50000:50000
+    # volumes: 
+      # - jenkins_home:/var/jenkins_home
+      # - homeDirectory:/home/jenkins/agent
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_SECRET=agent1
+      - JENKINS_AGENT_NAME=agent1
+      - JENKINS_WEB_SOCKET=true
+    depends_on:
+      - jenkins-master
+volumes:
+  jenkins_home:
