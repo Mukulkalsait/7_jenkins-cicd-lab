@@ -39,13 +39,14 @@ enum GuessResualt {
     GuessIsEqual,
 }
 // Y: work on this part now
-// struct RangeOfNumbers {
-//     lower_bound: u32,
-//     upper_bound: u32,
-// }
-// update_after_guess()
-// display_range()
-// is_within_range()
+struct RangeOfNumbers {
+    lower_bound: u32,
+    upper_bound: u32,
+}
+
+// update_after_guess(){}
+// display_range(){}
+// is_within_range(){}
 
 fn match_guess(sec_num: u32, guess: u32) -> GuessResualt {
     match guess.cmp(&sec_num) {
@@ -57,6 +58,11 @@ fn match_guess(sec_num: u32, guess: u32) -> GuessResualt {
 
 fn game_loop_start() {
     let sec_num = secret_number();
+    let range: RangeOfNumbers = RangeOfNumbers {
+        lower_bound: 1,
+        upper_bound: 1000,
+    }; // decleared : range
+
     loop {
         let mut guess_num = check_guess_number(guess_input());
         if (guess_num == 0) {
@@ -67,8 +73,8 @@ fn game_loop_start() {
         // RangeOfNumbers.upper_bound = 1000;
 
         match match_guess(sec_num, guess_num) {
-            GuessResualt::GuessIsSmaller => smaller_guess(),
-            GuessResualt::GuessIsGreater => greater_guess(),
+            GuessResualt::GuessIsSmaller => smaller_guess(guess_num, &mut RangeOfNumbers),
+            GuessResualt::GuessIsGreater => greater_guess(guess_num, &mut RangeOfNumbers),
             GuessResualt::GuessIsEqual => {
                 additional_functionality_additioon();
                 break;
@@ -77,14 +83,16 @@ fn game_loop_start() {
     }
 }
 
-fn smaller_guess() {
+fn smaller_guess(n: u32, range: RangeOfNumbers) {
+    let range = Point { lower_bound: n };
     println!(
         "{}, {}",
         "Your guess is too small".red(),
         "Please Input Higher Numbers"
     );
 }
-fn greater_guess() {
+fn greater_guess(n: u32, range: RangeOfNumbers) {
+    let range = Point { upper_bound: n };
     println!(
         "{}, {}",
         "Your guess is too big".red(),
