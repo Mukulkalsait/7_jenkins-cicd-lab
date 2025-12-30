@@ -9,14 +9,14 @@ fn main() {
 }
 
 fn secret_number() -> u32 {
-    // G: In rust anythign which chanses its internel state must be mutable.
-    // RNG changes its internel state every time its called.
+    // Y: in this function we are returning only and only u32 value for that value to return we are not even adding variable.
+    // G: In rust anythign which chanses its internel state must be mutable. RNG changes its internel state every time its called.
+
     let mut rng = rand::rng();
     rng.random_range(1..=1000)
-    // Y: in this function we are returning only and only u32 value for that value to return
-    // we are not even adding variable.
 }
 
+// Y: This function get stdin from user.
 fn guess_input() -> String {
     println!("| Guess The Number |");
     let mut guess = String::new();
@@ -62,12 +62,12 @@ fn game_loop_start() {
     let range: RangeOfNumbers = RangeOfNumbers {
         lower_bound: 1,
         upper_bound: 1000,
-    }; // decleared : range
+    }; // Y : Decleared : range -> we will lower it for more accurate op.
 
     loop {
         let mut guess_num = check_guess_number(guess_input());
         if (guess_num == 0) {
-            println!("🚫 Please Input Numbers Only !");
+            println!("🚫 Only Numbers between 1-1000 are allowed !!!");
             continue;
         }
         // RangeOfNumbers.lower_bound = 1;
