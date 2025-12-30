@@ -11,12 +11,10 @@ fn main() {
 fn secret_number() -> u32 {
     // Y: in this function we are returning only and only u32 value for that value to return we are not even adding variable.
     // G: In rust anythign which chanses its internel state must be mutable. RNG changes its internel state every time its called.
-
     let mut rng = rand::rng();
     rng.random_range(1..=1000)
 }
 
-// Y: This function get stdin from user.
 fn guess_input() -> String {
     println!("| Guess The Number |");
     let mut guess = String::new();
@@ -39,6 +37,15 @@ enum GuessResualt {
     GuessIsGreater,
     GuessIsEqual,
 }
+
+fn match_guess(sec_num: u32, guess: u32) -> GuessResualt {
+    match guess.cmp(&sec_num) {
+        Ordering::Less => GuessResualt::GuessIsSmaller,
+        Ordering::Greater => GuessResualt::GuessIsGreater,
+        Ordering::Equal => GuessResualt::GuessIsEqual,
+    }
+}
+
 // Y: work on this part now
 struct RangeOfNumbers {
     lower_bound: u32,
@@ -49,14 +56,6 @@ fn update_after_guess() {}
 fn display_range() {}
 fn is_within_range() {}
 
-fn match_guess(sec_num: u32, guess: u32) -> GuessResualt {
-    match guess.cmp(&sec_num) {
-        Ordering::Less => GuessResualt::GuessIsSmaller,
-        Ordering::Greater => GuessResualt::GuessIsGreater,
-        Ordering::Equal => GuessResualt::GuessIsEqual,
-    }
-}
-
 fn game_loop_start() {
     let sec_num = secret_number();
     let range: RangeOfNumbers = RangeOfNumbers {
@@ -66,12 +65,13 @@ fn game_loop_start() {
 
     loop {
         let mut guess_num = check_guess_number(guess_input());
+
         if (guess_num == 0) {
             println!("🚫 Only Numbers between 1-1000 are allowed !!!");
             continue;
         }
-        // RangeOfNumbers.lower_bound = 1;
-        // RangeOfNumbers.upper_bound = 1000;
+        RangeOfNumbers.lower_bound = 1;
+        RangeOfNumbers.upper_bound = 1000;
 
         match match_guess(sec_num, guess_num) {
             GuessResualt::GuessIsSmaller => smaller_guess(guess_num, &mut RangeOfNumbers),
