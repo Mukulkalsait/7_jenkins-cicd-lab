@@ -25,24 +25,26 @@ fn guess_input() -> String {
 }
 
 fn check_guess_number(n: String) -> u32 {
-    let n: u32 = match n.trim().parse::<u32>() {
-        Ok(num) => num,
-        Err(_) => 0,
-    };
+    //Y: older way let n: u32 = match n.trim().parse::<u32>() { Ok(num) => num, Err(_) => 0, };
+    //
+    //unwarp to default will give u32 = 0 | string = "" | bool = false | Vec = []  which are
+    //there default valuse.
+
+    let n: u32 = n.trim().parse::<u32>().unwrap_or_default();
     n
 }
 
 enum GuessResualt {
-    GuessIsSmaller,
-    GuessIsGreater,
-    GuessIsEqual,
+    Smaller, // Y: guess is smaler ans so on: weTried-> GuessIsSmaller->but then GuessIs part is common
+    Greater,
+    Equal,
 }
 
 fn match_guess(sec_num: u32, guess: u32) -> GuessResualt {
     match guess.cmp(&sec_num) {
-        Ordering::Less => GuessResualt::GuessIsSmaller,
-        Ordering::Greater => GuessResualt::GuessIsGreater,
-        Ordering::Equal => GuessResualt::GuessIsEqual,
+        Ordering::Less => GuessResualt::Smaller,
+        Ordering::Greater => GuessResualt::Greater,
+        Ordering::Equal => GuessResualt::Equal,
     }
 }
 
@@ -60,17 +62,17 @@ fn game_loop_start() {
     }; // Y : Decleared : range -> we will lower it for more accurate op.
 
     loop {
-        let mut guess_num = check_guess_number(guess_input());
+        let guess_num = check_guess_number(guess_input());
 
-        if (guess_num == 0) {
+        if guess_num == 0 {
             println!("🚫 Only Numbers between 1-1000 are allowed !!!");
             continue;
         }
 
         match match_guess(sec_num, guess_num) {
-            GuessResualt::GuessIsSmaller => smaller_guess(guess_num, &mut range_of_numbers),
-            GuessResualt::GuessIsGreater => greater_guess(guess_num, &mut range_of_numbers),
-            GuessResualt::GuessIsEqual => {
+            GuessResualt::Smaller => smaller_guess(guess_num, &mut range_of_numbers),
+            GuessResualt::Greater => greater_guess(guess_num, &mut range_of_numbers),
+            GuessResualt::Equal => {
                 additional_functionality_additioon();
                 break;
             }
@@ -81,10 +83,10 @@ fn game_loop_start() {
 fn smaller_guess(n: u32, range: &mut Range) {
     range.lower_bound = n;
     println!(
-        "{}, {}, {} , {} to {}",
+        "{}, {}, {}, {} to {}",
         "Your guess is too small".red(),
-        "Please Input Higher Numbers",
-        "Updated Range is ",
+        "Please Input Higher Numbers".green(),
+        "Updated Range is".blue(),
         range.lower_bound,
         range.upper_bound
     );
@@ -92,10 +94,10 @@ fn smaller_guess(n: u32, range: &mut Range) {
 fn greater_guess(n: u32, range: &mut Range) {
     range.upper_bound = n;
     println!(
-        "{}, {}, {} , {} to {}",
+        "{}, {}, {}, {} to {}",
         "Your guess is too big".red(),
-        "Please Input Lower Numbers",
-        "Updated Range is ",
+        "Please Input Lower Numbers".green(),
+        "Updated Range is".blue(),
         range.lower_bound,
         range.upper_bound
     );
