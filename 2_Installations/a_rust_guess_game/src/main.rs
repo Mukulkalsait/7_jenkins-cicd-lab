@@ -3,8 +3,26 @@ use rand::Rng;
 use std::{cmp::Ordering, io};
 
 fn main() {
+    println!(
+        "|==================> Please Select The Level {} vs {} <==================|",
+        "'Easy'".green(),
+        "'Hard'".red()
+    );
+    let mut level: String = String::new();
+    io::stdin()
+        .read_line(&mut level)
+        .expect("⛔ Failure to read.");
+
+    let mut easy = true;
+    if level.trim() == "Hard" || level.trim() == "hard" {
+        easy = false;
+        println!("Hard Game Started Without Hints.")
+    } else {
+        println!("Easy Game Started With Hints.")
+    }
+
     println!("|=================== Guseesing Game ==========================|");
-    game_loop_start();
+    game_loop_start(easy);
     println!("|=================== End of the Game ==========================|");
 }
 
@@ -54,7 +72,7 @@ struct Range {
     upper_bound: u32,
 }
 
-fn game_loop_start() {
+fn game_loop_start(easy: bool) {
     let sec_num = secret_number();
     let mut range_of_numbers: Range = Range {
         lower_bound: 1,
@@ -68,13 +86,23 @@ fn game_loop_start() {
             println!("🚫 Only Numbers between 1-1000 are allowed !!!");
             continue;
         }
-
-        match match_guess(sec_num, guess_num) {
-            GuessResualt::Smaller => smaller_guess(guess_num, &mut range_of_numbers),
-            GuessResualt::Greater => greater_guess(guess_num, &mut range_of_numbers),
-            GuessResualt::Equal => {
-                additional_functionality_additioon();
-                break;
+        if easy {
+            match match_guess(sec_num, guess_num) {
+                GuessResualt::Smaller => smaller_guess(guess_num, &mut range_of_numbers),
+                GuessResualt::Greater => greater_guess(guess_num, &mut range_of_numbers),
+                GuessResualt::Equal => {
+                    additional_functionality_additioon();
+                    break;
+                }
+            }
+        } else {
+            match match_guess(sec_num, guess_num) {
+                GuessResualt::Smaller => println!("{}", "Your guess is too small".red()),
+                GuessResualt::Greater => println!("{}", "Your guess is too big".red()),
+                GuessResualt::Equal => {
+                    additional_functionality_additioon();
+                    break;
+                }
             }
         }
     }
