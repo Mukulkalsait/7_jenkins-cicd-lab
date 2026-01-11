@@ -10,7 +10,6 @@ pub fn set_dificulty() {
         "'Hard'".red()
     );
     let level: logic::Dificulty;
-
     let level = input::read_dificulty();
 }
 
